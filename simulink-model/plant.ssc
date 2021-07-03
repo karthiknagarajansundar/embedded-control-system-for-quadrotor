@@ -1,0 +1,77 @@
+component plant
+%Plant of quadrocopter
+
+inputs
+   ctrl={[0;0;0;0],'N'}; %Thrust:left
+end
+
+outputs
+    pos={[0;0;0],'m'}; %Position:right
+    v = {[0;0;0], 'm/s' }; %Velocity:right
+    a = {[0;0;0], 'm/s^2' }; %Acceleration:right
+    
+    angle = {[0;0;0],'rad'};%Angle:right
+    w = {[0;0;0],'rad/s'};%Angular velocity:right
+end
+
+parameters
+    m = {0.027,'kg'};%Mass
+    g = {9.81,'m/s^2'};%Gravity
+    d = {0.046,'m'};%Arm length
+
+    lift = {1.9796e-9,'1'};%Lift constant
+    drag = {2.5383e-11,'1*m'};%Drag constant
+end
+
+parameters(Access=private)    
+    %Moment of inertia matrix
+    Jx = {1.1463e-5,'kg*m^2'};
+    Jy = {1.6993e-5,'kg*m^2'};
+    Jz = {2.9944e-5,'kg*m^2'};
+    J = [Jx,0,0;0,Jy,0;0,0,Jz];
+    
+    % Add time invariant parameters here 
+
+end
+
+variables(Access=private)
+    rotx = {zeros(3,3),'1'};
+    roty = {zeros(3,3),'1'};
+    rotz = {zeros(3,3),'1'};
+    rib = {zeros(3,3),'1'};
+    
+    Tx = {0,'m*N'};
+    Ty = {0,'m*N'};
+    Tz = {0,'m*N'};
+    T = {zeros(3,1),'m*N'};
+    phi   = {0,'rad'};
+    theta = {0,'rad'};
+    psi   = {0,'rad'};
+    % Add time variant variables here
+
+end
+
+equations                                              
+
+    % Add all equations here 
+v.der == a;
+pos.der == v;
+a == 0;
+
+angle == [phi; theta; psi];
+angle.der == w;
+
+Tz == (drag/lift) * (ctrl(4) + ctrl(2) - ctrl(1) - ctrl(3));
+Tx == d*sin(pi/4) * (ctrl(3) + ctrl(4) - ctrl(1) - ctrl(2));
+Ty == d*sin(pi/4) * (ctrl(2) + ctrl(3) - ctrl(1) - ctrl(4));
+T == [Tx Ty Tz]';
+
+J*w.der == cross(-w, J*w) + T;
+
+rotx  == [1 0 0; 0 cos(phi) sin(phi); 0 -sin(phi) cos(phi)];
+roty  == [cos(theta) 0 -sin(theta); 0 1 0; sin(theta) 0 cos(theta)];
+rotz  == [cos(psi) sin(psi) 0; -sin(psi)  cos(psi) 0; 0 0 1];
+rib == rotx*roty*rotz;
+
+end
+end
