@@ -1,14 +1,27 @@
-# SSY191 Project
+# Embedded control system design for a quadrotor
+### Model-based development of cyber-physical systems
+## Abstract
+The main objective of this project is modelling and control of the quadcopter (Crazyflie). Various processes like estimation of orientation using complementary filter, Equation-based Modelling (i.e model-based approach), Linearization of the plant, LQR based controller design and evaluation, and respective simulations. The tools used for modelling, evaluation and simulation includes Matlab, Simulink and Simscape. The LQR has been fine tuned for better results of the controller. Finally, all the mentioned tasks were implemented in RTOS with task scheduling using real time C programming.
 
-In addition to the original source code for the quadrotor, see src directory, the folder simulink-model contains the templates for the Simulink and Simscape models that you will use during the course. The contents of this folder is as follows:
+## Orientation estimation using complementary filter
+### Complementary filter model
+<img src="https://github.com/karthiknagarajansundar/embedded-control-system-for-quadrotor/blob/main/Images/compFilt.JPG" width="750" height="450">
 
-* closed_loop_script.m -- Script for running tests with Breach. Will be used for automated testing.
-* closed_loop.slx -- Closed loop system. You are not expected to do any changes in this file, in fact it is easier for us to help you if you keep the structure as is.
-* crazyflie.slx -- Controller and code generator. Your controller goes in this file.
-* crazyflie_wrapper.tlc -- Code generation template. Inserts the generated code at the right place in the firmware with the correct inputs and outputs. Does not need to be changed.
-* open_loop.slx -- Open loop Simulink file. Should not need any changes.
-* params.m -- Setup of parameters, such as mass and inertia.
-* plant.ssc -- Simscape model of the plant. Your model goes here.
-* sensors.sscp -- Simscape blackbox model of the sensor emulator. Cannot be changed.
+### Plots of accelerometer and gyroscope data along the three axes, up-to 90 seconds
+<img src="https://github.com/karthiknagarajansundar/embedded-control-system-for-quadrotor/blob/main/Images/acc_data.jpg" width="400" height="200"> <img src="https://github.com/karthiknagarajansundar/embedded-control-system-for-quadrotor/blob/main/Images/gyro_data.jpg" width="400" height="200">
 
+### Pitch and roll estimations
+<img src="https://github.com/karthiknagarajansundar/embedded-control-system-for-quadrotor/blob/main/Images/estimates.jpg" width="600" height="300">
 
+## Evaluation of LQR controller in Real Time Operating System
+### ROLL 
+<img src="https://github.com/karthiknagarajansundar/embedded-control-system-for-quadrotor/blob/main/Images/proj5plots.jpg" width="500" height="400"> 
+
+### PITCH
+<img src="https://github.com/karthiknagarajansundar/embedded-control-system-for-quadrotor/blob/main/Images/proj5plots2.jpg" width="500" height="400">
+
+## Conclusion
+The controller has been simulated with different scenarios and verified that the controller is able to adapt to the changes accordingly and smoothly with faster response time. Hence the performance is observed to be good and optimal.
+
+## License
+[MIT License](https://github.com/karthiknagarajansundar/image-generation-using-GAN/blob/main/LICENSE)
